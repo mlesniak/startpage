@@ -1,0 +1,11 @@
+// Rename to links.json
+[
+  {
+    "name": "Google",
+    "link": "https://www.google.com"
+  },
+  {
+    "name": "Spiegel Online",
+    "link": "http://www.spiegel.de"
+  }
+]

@@ -1,8 +1,70 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
   <title>Startpage</title>
+  <link rel="stylesheet" type="text/css" href="main.css">
+  <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
 </head>
 <body>
+
+<h3>
+  <input type="text" name="q" id="search" size="32" autofocus="on" autocomplete="off"  />
+</h3>
+
+<p/>
+
+<ul id="links">
+  </ul>
+
+<script>
+  $(function() {
+    $.get("/links.json", function(data) {
+      var links = $("#links");
+      data.forEach(function(entry) {
+        var link = "<li><a href='" + entry.link + "'>" + entry.name + "</a></li>";
+        links.append(link);
+      });
+    });
+
+    $("#search").keyup(function(event) {
+      var value = $(event.target).val();
+
+      if ( event.which == 13 ) {
+        $("#search").select();
+
+        // If entry starts with space, call google.
+        if (value.startsWith(" ")) {
+          window.open("https://www.google.de/webhp?hl=de#safe=off&hl=de&q="+value);
+          return;
+        }
+
+        event.preventDefault();
+        var link = $("#links > li:visible").find('a').attr("href");
+        window.open(link)
+        return;
+      }
+
+      var expr = ".*";
+      for(var i = 0; i < value.length; ++i) {
+        expr += value[i] + ".*";
+      }
+
+      var pattern = new RegExp(expr, "i");
+      $("#links").find('li').each(function(index, elem) {
+        var li = $(elem);
+        var link = li.find('a');
+        var text = link.text();
+        var n = text.search(pattern);
+
+        if (n > -1) {
+          li.show();
+        } else {
+          li.hide();
+        }
+      })  
+    })
+  })
+</script>
+
 </body>
 </html>
