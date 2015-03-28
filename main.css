@@ -40,3 +40,7 @@ a:active {
 ul {
     list-style-type: none;
 }
+
+.full {
+  width: 100%;
+}
